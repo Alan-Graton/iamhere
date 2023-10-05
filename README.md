@@ -8,9 +8,9 @@
 - [ ] Implementar Cores utilizadas
 
 ### UX
-- [ ] Usuário deve poder cadastrar uma tarefa
+- [X] Usuário deve poder cadastrar uma tarefa
 - [ ] Usuário deve poder marcar tarefa como realizada
-- [ ] Usuário deve poder deletar uma terafa
+- [X] Usuário deve poder deletar uma terafa
 
 ## Descrição
 
