@@ -9,7 +9,7 @@
 
 ### UX
 - [X] Usuário deve poder cadastrar uma tarefa
-- [ ] Usuário deve poder marcar tarefa como realizada
+- [X] Usuário deve poder marcar tarefa como realizada
 - [X] Usuário deve poder deletar uma terafa
 
 ## Descrição
