@@ -15,12 +15,17 @@ import { styles } from "./styles";
 import Toast from "react-native-toast-message";
 import Clipboard from "../../assets/Clipboard.png";
 
+interface ITasks {
+  description: string;
+  status: "unchecked" | "checked";
+}
+
 export function Home() {
-  const [tasks, setTasks] = React.useState<string[]>([]);
-  const [task, setTask] = React.useState<string>("");
+  const [tasks, setTasks] = React.useState<ITasks[]>([]);
+  const [taskName, setTaskName] = React.useState<string>("");
 
   function handleCreate(task: string): void {
-    if (tasks.find((el) => el === task)) {
+    if (tasks.find((el) => el.description === task)) {
       // FIXME: Toast not displaying
       Toast.show({
         type: "error",
@@ -29,19 +34,25 @@ export function Home() {
       });
       return;
     }
-    setTasks((prev) => [...prev, task]);
+
+    setTasks((prev) => [...prev, { description: task, status: "unchecked" }]);
   }
-  function handleMarkAsDone() {}
+  function handleMarkAsDone(task: ITasks, index: number) {
+    const updatedTask = [...tasks];
+
+    updatedTask[index] = {
+      ...updatedTask[index],
+      status: updatedTask[index].status === "checked" ? "unchecked" : "checked",
+    };
+
+    setTasks(updatedTask);
+  }
 
   function handleDelete(pressedTask: string) {
-    const removeTask = tasks.filter((el) => el !== pressedTask);
+    const removeTask = tasks.filter((el) => el.description !== pressedTask);
 
     setTasks((prev) => [...removeTask]);
   }
-
-  React.useEffect(() => {
-    console.info(tasks);
-  }, [tasks]);
 
   return (
     <>
@@ -55,11 +66,11 @@ export function Home() {
             placeholder="Adicione uma Tarefa"
             placeholderTextColor="#F2F2F2"
             style={styles.new_task_input}
-            onChangeText={(text) => setTask((prev) => (prev = text))}
+            onChangeText={(text) => setTaskName((prev) => (prev = text))}
           />
           <TouchableOpacity
             style={styles.new_task_btn}
-            onPress={() => handleCreate(task)}
+            onPress={() => handleCreate(taskName)}
           >
             <Text style={{ fontSize: 24, color: "#FFF" }}>+</Text>
           </TouchableOpacity>
@@ -67,14 +78,17 @@ export function Home() {
         {/* TODO: Get rid of this big hunk of code and use FlatList */}
         {tasks.length > 0 ? (
           <ScrollView>
-            {tasks?.map((task) => (
-              <View style={styles.todo_card} key={task}>
-                <Checkbox status="checked" />
-                <Text style={styles.text}>{task}</Text>
+            {tasks?.map((task, index) => (
+              <View style={styles.todo_card} key={task.description}>
+                <Checkbox
+                  status={task.status}
+                  onPress={() => handleMarkAsDone(task, index)}
+                />
+                <Text style={styles.text}>{task.description}</Text>
                 <IconButton
                   icon={"delete"}
                   iconColor="#E25858"
-                  onPress={() => handleDelete(task)}
+                  onPress={() => handleDelete(task.description)}
                 />
               </View>
             ))}
