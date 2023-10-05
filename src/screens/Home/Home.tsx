@@ -1,6 +1,7 @@
 import React from "react";
 // Widgets
 import {
+  Alert,
   Image,
   ScrollView,
   Text,
@@ -12,7 +13,7 @@ import { Checkbox, IconButton } from "react-native-paper";
 // Styles
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./styles";
-import Toast from "react-native-toast-message";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
 import Clipboard from "../../assets/Clipboard.png";
 
 interface ITasks {
@@ -49,9 +50,22 @@ export function Home() {
   }
 
   function handleDelete(pressedTask: string) {
-    const removeTask = tasks.filter((el) => el.description !== pressedTask);
+    Alert.alert(`Deletar tarefa "${pressedTask}"?`, "Deseja continuar?", [
+      {
+        text: "Sim",
+        onPress: () => {
+          const removeTask = tasks.filter(
+            (el) => el.description !== pressedTask
+          );
 
-    setTasks((prev) => [...removeTask]);
+          setTasks((prev) => [...removeTask]);
+        },
+      },
+      {
+        text: "Não",
+        style: "cancel",
+      },
+    ]);
   }
 
   return (
