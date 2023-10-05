@@ -1,44 +1,61 @@
 import React from "react";
-import { Button, Text, TextInput, View } from "react-native";
+// Widgets
+import {
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Checkbox, IconButton } from "react-native-paper";
+// Styles
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./styles";
 
 export function Home() {
-  const [todos, setTodos] = React.useState<string[]>();
+  const [tasks, setTasks] = React.useState<string[]>([]);
+  const [task, setTask] = React.useState<string>("");
 
-  const handleCreate = () => {};
+  function handleCreate(task: string): void {
+    setTasks((prev) => [...prev, task]);
+  }
   const handleMarkAsDone = () => {};
   const handleDelete = () => {};
+
+  React.useEffect(() => {
+    console.info(tasks);
+  }, [tasks]);
 
   return (
     <>
       <View style={styles.container}>
-        {/* TODO: Header - Logo */}
-        {/* Header - Creation Bar */}
         <View style={styles.header}>
           <Ionicons name="rocket" size={24} color="#FFF" />
-          <Text style={styles.text}>todo</Text>
-          <TextInput placeholder="Nova Tarefa" placeholderTextColor="#F2F2F2" />
-          <Button title="+" />
+          <Text style={styles.title}>todo</Text>
         </View>
-        {/* TODO: Counters */}
-        <View>
-          <Text style={styles.text}>Criadas 0</Text>
-          <Text style={styles.text}>Finalizadas 0</Text>
+        <View style={styles.form}>
+          <TextInput
+            placeholder="Adicione uma Tarefa"
+            placeholderTextColor="#F2F2F2"
+            style={styles.new_task_input}
+            onChangeText={(text) => setTask((prev) => (prev = text))}
+          />
+          <TouchableOpacity
+            style={styles.new_task_btn}
+            onPress={() => handleCreate(task)}
+          >
+            <Text style={{ fontSize: 24, color: "#FFF" }}>+</Text>
+          </TouchableOpacity>
         </View>
-        {/* Content - Tasks */}
-        <View style={styles.todo_card}>
-          <View style={styles.todo_action}>
-            <Checkbox status="checked" />
-          </View>
-          <View style={styles.todo_content}>
-            <Text style={styles.text}>Finalizar Layout</Text>
-          </View>
-          <View style={styles.todo_action}>
-            <IconButton icon={"delete"} iconColor="red" />
-          </View>
-        </View>
+        <ScrollView>
+          {tasks?.map((task) => (
+            <View style={styles.todo_card} key={task}>
+              <Checkbox status="checked" />
+              <Text style={styles.text}>{task}</Text>
+              <IconButton icon={"delete"} iconColor="#E25858" />
+            </View>
+          ))}
+        </ScrollView>
       </View>
     </>
   );
