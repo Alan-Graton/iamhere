@@ -1,72 +1,28 @@
 import React from "react";
 // Widgets
 import {
-  Alert,
-  Image,
-  ScrollView,
+  FlatList,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import { Checkbox, IconButton } from "react-native-paper";
+// Types
+import { ITasks } from "../../types/ITasks";
+// Components
+import { EmptyList } from "../../components/EmptyList/EmptyList";
+// Utils
+import { handleCreate } from "./ts/handleCreate";
+import { handleDeleteTask } from "./ts/handleDeleteTask";
+import { handleMarkAsDone } from "./ts/handleMarkAsDone";
 // Styles
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./styles";
-import { Toast } from "react-native-toast-message/lib/src/Toast";
-import Clipboard from "../../assets/Clipboard.png";
-
-interface ITasks {
-  description: string;
-  status: "unchecked" | "checked";
-}
 
 export function Home() {
   const [tasks, setTasks] = React.useState<ITasks[]>([]);
   const [taskName, setTaskName] = React.useState<string>("");
-
-  function handleCreate(task: string): void {
-    if (tasks.find((el) => el.description === task)) {
-      // FIXME: Toast not displaying
-      Toast.show({
-        type: "error",
-        text1: "Opa!",
-        text2: "Você já cadastrou uma tarefa igual a essa",
-      });
-      return;
-    }
-
-    setTasks((prev) => [...prev, { description: task, status: "unchecked" }]);
-  }
-  function handleMarkAsDone(task: ITasks, index: number) {
-    const updatedTask = [...tasks];
-
-    updatedTask[index] = {
-      ...updatedTask[index],
-      status: updatedTask[index].status === "checked" ? "unchecked" : "checked",
-    };
-
-    setTasks(updatedTask);
-  }
-
-  function handleDelete(pressedTask: string) {
-    Alert.alert(`Deletar tarefa "${pressedTask}"?`, "Deseja continuar?", [
-      {
-        text: "Sim",
-        onPress: () => {
-          const removeTask = tasks.filter(
-            (el) => el.description !== pressedTask
-          );
-
-          setTasks((prev) => [...removeTask]);
-        },
-      },
-      {
-        text: "Não",
-        style: "cancel",
-      },
-    ]);
-  }
 
   return (
     <>
@@ -84,42 +40,32 @@ export function Home() {
           />
           <TouchableOpacity
             style={styles.new_task_btn}
-            onPress={() => handleCreate(taskName)}
+            onPress={() => handleCreate(setTasks, tasks, taskName)}
           >
             <Text style={{ fontSize: 24, color: "#FFF" }}>+</Text>
           </TouchableOpacity>
         </View>
-        {/* TODO: Get rid of this big hunk of code and use FlatList */}
-        {tasks.length > 0 ? (
-          <ScrollView>
-            {tasks?.map((task, index) => (
-              <View style={styles.todo_card} key={task.description}>
-                <Checkbox
-                  status={task.status}
-                  onPress={() => handleMarkAsDone(task, index)}
-                />
-                <Text style={styles.text}>{task.description}</Text>
-                <IconButton
-                  icon={"delete"}
-                  iconColor="#E25858"
-                  onPress={() => handleDelete(task.description)}
-                />
-              </View>
-            ))}
-          </ScrollView>
-        ) : (
-          <>
-            <View style={{ alignItems: "center", padding: 5 }}>
-              <Image source={Clipboard} style={{ marginBottom: 10 }} />
-              <Text style={{ color: "white", fontSize: 16, fontWeight: "500" }}>
-                Você ainda não tem tarefas cadastradas
-              </Text>
-              <Text style={{ color: "white", fontSize: 16 }}>
-                Crie tarefas e organize seus items a fazer
-              </Text>
+        <FlatList
+          data={tasks}
+          keyExtractor={(item) => item.description}
+          ListEmptyComponent={<EmptyList />}
+          renderItem={({ item, index }) => (
+            <View style={styles.todo_card} key={item.description}>
+              <Checkbox
+                status={item.status}
+                onPress={() => handleMarkAsDone(setTasks, tasks, item, index)}
+              />
+              <Text style={styles.text}>{item.description}</Text>
+              <IconButton
+                icon={"delete"}
+                iconColor="#E25858"
+                onPress={() =>
+                  handleDeleteTask(setTasks, tasks, item.description)
+                }
+              />
             </View>
-          </>
-        )}
+          )}
+        />
       </View>
     </>
   );
