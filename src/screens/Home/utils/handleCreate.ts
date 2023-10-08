@@ -16,5 +16,7 @@ export function handleCreate(
     return;
   }
 
+  if (!task) return;
+
   setTasks((prev) => [...prev, { description: task, status: "unchecked" }]);
 }

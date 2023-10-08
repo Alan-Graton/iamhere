@@ -43,6 +43,15 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 4,
   },
+  tasks_counters: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "gray",
+    marginBottom: 10,
+  },
   todo_card: {
     marginBottom: 15,
     backgroundColor: "#808080",

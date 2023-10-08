@@ -13,9 +13,9 @@ import { ITasks } from "../../types/ITasks";
 // Components
 import { EmptyList } from "../../components/EmptyList/EmptyList";
 // Utils
-import { handleCreate } from "./ts/handleCreate";
-import { handleDeleteTask } from "./ts/handleDeleteTask";
-import { handleMarkAsDone } from "./ts/handleMarkAsDone";
+import { handleCreate } from "./utils/handleCreate";
+import { handleDeleteTask } from "./utils/handleDeleteTask";
+import { handleMarkAsDone } from "./utils/handleMarkAsDone";
 // Styles
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./styles";
@@ -23,6 +23,9 @@ import { styles } from "./styles";
 export function Home() {
   const [tasks, setTasks] = React.useState<ITasks[]>([]);
   const [taskName, setTaskName] = React.useState<string>("");
+
+  let createdTasks = tasks.length;
+  let checkedTasks = tasks.filter((task) => task.status === "checked").length;
 
   return (
     <>
@@ -44,6 +47,10 @@ export function Home() {
           >
             <Text style={{ fontSize: 24, color: "#FFF" }}>+</Text>
           </TouchableOpacity>
+        </View>
+        <View style={styles.tasks_counters}>
+          <Text style={styles.text}>Criadas: {createdTasks}</Text>
+          <Text style={styles.text}>Concluidas: {checkedTasks}</Text>
         </View>
         <FlatList
           data={tasks}
