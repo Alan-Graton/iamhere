@@ -7,10 +7,18 @@ export function EmptyList() {
     <>
       <View style={{ alignItems: "center", padding: 5 }}>
         <Image source={Clipboard} style={{ marginBottom: 10 }} />
-        <Text style={{ color: "white", fontSize: 16, fontWeight: "500" }}>
+        <Text
+          style={{
+            color: "white",
+            fontSize: 14,
+            fontFamily: "Inter_500Medium",
+          }}
+        >
           Você ainda não tem tarefas cadastradas
         </Text>
-        <Text style={{ color: "white", fontSize: 16 }}>
+        <Text
+          style={{ color: "white", fontSize: 14, fontFamily: "Inter_300Light" }}
+        >
           Crie tarefas e organize seus items a fazer
         </Text>
       </View>

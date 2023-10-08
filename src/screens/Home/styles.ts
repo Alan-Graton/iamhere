@@ -17,9 +17,11 @@ export const styles = StyleSheet.create({
   title: {
     color: "#FFF",
     fontSize: 24,
+    fontFamily: "Inter_700Bold",
   },
   text: {
     color: "#F2F2F2",
+    fontFamily: "Inter_300Light",
   },
   form: {
     flexDirection: "row",
@@ -30,6 +32,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     fontSize: 16,
+    fontFamily: "Inter_300Light",
     height: 55,
     backgroundColor: "#808080",
     marginRight: 12,

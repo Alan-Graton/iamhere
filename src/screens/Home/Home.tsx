@@ -19,8 +19,32 @@ import { handleMarkAsDone } from "./utils/handleMarkAsDone";
 // Styles
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./styles";
+import {
+  useFonts,
+  Inter_100Thin,
+  Inter_200ExtraLight,
+  Inter_300Light,
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  Inter_800ExtraBold,
+  Inter_900Black,
+} from "@expo-google-fonts/inter";
 
 export function Home() {
+  const [fontsLoaded, fontError] = useFonts({
+    Inter_100Thin,
+    Inter_200ExtraLight,
+    Inter_300Light,
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+    Inter_800ExtraBold,
+    Inter_900Black,
+  });
+
   const [tasks, setTasks] = React.useState<ITasks[]>([]);
   const [taskName, setTaskName] = React.useState<string>("");
 
